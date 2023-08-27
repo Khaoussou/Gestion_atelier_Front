@@ -1,0 +1,10 @@
+.bap {
+    background-color: rgba(255, 255, 255, 0.535);
+    width: 80%;
+    height: 70vh;
+    border: 1px solid gray;
+}
+
+.cursor {
+    cursor: pointer;
+}

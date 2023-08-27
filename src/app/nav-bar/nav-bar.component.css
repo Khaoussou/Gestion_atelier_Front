@@ -1,0 +1,26 @@
+.cont {
+    background-color: rgba(44, 156, 168, 0.555);
+    color: white;
+    height: 10vh;
+    font-style: inherit;
+    padding: 1%;
+}
+
+.no-underline {
+    text-decoration: none;
+    color: white;
+}
+
+.no-underline:hover {
+    text-decoration: block;
+    color: rgb(5, 159, 5);
+}
+
+.style {
+    list-style-type: none;
+}
+
+.title {
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bold;
+}

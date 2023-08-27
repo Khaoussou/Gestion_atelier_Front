@@ -1,0 +1,22 @@
+<tr
+  *ngFor="
+    let article of articles
+      | paginate : { itemsPerPage: itemsPerPage, currentPage: p }
+  "
+>
+  <td>{{ article.libelle }}</td>
+  <td>{{ article.prix }}</td>
+  <td>{{ article.stock }}</td>
+  <td>{{ article.categorie }}</td>
+  <td class="d-flex gap-3">
+    <button (click)="update($event)" id="{{ article.id }}" class="btn ajout">
+      Modifier
+    </button>
+    <button (click)="delete($event)" id="{{ article.id }}" class="btn delete">
+      Supprimer
+    </button>
+  </td>
+</tr>
+<div class="mt-8 py-5 d-flex justify-content-center">
+  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+</div>

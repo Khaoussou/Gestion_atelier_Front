@@ -1,0 +1,44 @@
+.ajout {
+  background-color: rgba(44, 156, 168, 0.555);
+}
+
+.margin {
+  margin-right: 5%;
+}
+
+.name {
+  margin-left: 20%;
+}
+
+.formatImage {
+  height: 150px;
+  width: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: #dfdfdf;
+}
+
+.radius {
+  border-radius: 50%;
+}
+
+.img {
+  display: none;
+}
+
+.opacity {
+  opacity: 0;
+}
+
+.delete {
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  border-radius: 50%;
+  background-color: rgb(247, 81, 81);
+  color: white;
+}
+
+.span {
+  background-color: rgb(212, 231, 247);
+}

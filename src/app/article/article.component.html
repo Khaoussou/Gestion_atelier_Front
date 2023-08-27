@@ -1,0 +1,14 @@
+<app-form
+  [categories]="categories"
+  [fournisseurs]="fournisseurs"
+  [articles]="articles"
+  [article]="article"
+  (formgroupValue)="addOrUpdateArticle($event)"
+  [message]="message"
+  (valid)="valid($event)"
+></app-form>
+<app-list
+  [articles]="articles"
+  (idDelete)="valueId($event)"
+  (idUpdate)="valueIdUpdate($event)"
+></app-list>

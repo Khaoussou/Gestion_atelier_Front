@@ -1,0 +1,202 @@
+<div class="container mt-5">
+  <h2 class="mb-3">Ajouter un article</h2>
+  <!-- {{ formgroup.value | json }} -->
+  <form [formGroup]="formgroup" (ngSubmit)="onSubmit()">
+    <div class="d-flex justify-content-around">
+      <div>
+        <div class="mb-3 d-flex gap-3">
+          <div class="w-25">
+            <label for="libelle" class="form-label">Libellé</label>
+          </div>
+          <div>
+            <input
+              type="text"
+              formControlName="libelle"
+              class="form-control"
+              id="libelle"
+              name="libelle"
+              required
+            />
+            <div
+              class="text-danger"
+              *ngIf="
+                formgroup.controls['libelle'].errors &&
+                formgroup.controls['libelle'].touched
+              "
+            >
+              {{ displayErrorMessage(formgroup.controls["libelle"], "bap") }}
+            </div>
+          </div>
+        </div>
+        <div class="mb-3 d-flex gap-3">
+          <div class="w-25">
+            <label for="prix" class="form-label">Prix</label>
+          </div>
+          <div>
+            <input
+              type="number"
+              formControlName="prix"
+              class="form-control"
+              id="prix"
+              name="prix"
+              step="0.01"
+              required
+            />
+            <div
+              class="text-danger"
+              *ngIf="
+                formgroup.controls['prix'].errors &&
+                formgroup.controls['prix'].touched
+              "
+            >
+              {{ "bap" }}
+            </div>
+          </div>
+        </div>
+        <div class="mb-3 d-flex gap-3">
+          <div class="w-25">
+            <label for="stock" class="form-label">Stock</label>
+          </div>
+          <div>
+            <input
+              type="number"
+              formControlName="stock"
+              class="form-control"
+              id="stock"
+              name="stock"
+              required
+            />
+            <div
+              class="text-danger"
+              *ngIf="
+                formgroup.controls['stock'].errors &&
+                formgroup.controls['stock'].touched
+              "
+            >
+              {{ "bap" }}
+            </div>
+          </div>
+        </div>
+        <div class="mb-3 d-flex gap-3">
+          <div class="w-25">
+            <label for="categorie" class="form-label">Catégorie</label>
+          </div>
+          <div>
+            <select
+              class="form-select"
+              formControlName="categorie"
+              (change)="refNameCat()"
+              id="categorie"
+              name="categorie"
+              required
+            >
+              <option value="" disabled selected>
+                Choisissez une catégorie
+              </option>
+              <option
+                value="{{ categorie.libelle }}"
+                *ngFor="let categorie of categories"
+              >
+                {{ categorie.libelle }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="photo" class="form-label">Photo</label>
+        <div class="position-relative">
+          <input
+            type="file"
+            class="form-control position-absolute opacity formatImage"
+            formControlName="photo"
+            (change)="onChange($event)"
+            id="photo"
+            name="photo"
+            accept="image/*"
+            required
+          />
+          <img [src]="imageUrl" alt="" class="formatImage" />
+        </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-around">
+      <div class="mb-3 margin d-flex justify-content-between gap-3">
+        <div>
+          <label for="fournisseur" class="form-label">Fournisseur</label>
+        </div>
+        <div>
+          <input
+            type="text"
+            formControlName="fournisseur"
+            (input)="fourValue()"
+            class="form-control"
+            id="fournisseur"
+            name="fournisseur"
+            required
+          />
+          <div
+            class="text-danger"
+            *ngIf="
+              formgroup.controls['fournisseur'].errors &&
+              formgroup.controls['fournisseur'].touched
+            "
+          >
+            {{ "bap" }}
+          </div>
+        </div>
+      </div>
+      <div class="mb-3 d-flex gap-3">
+        <input
+          #ref
+          type="text"
+          [value]="
+            'REF-' +
+            (formgroup.value.libelle == undefined
+              ? ''
+              : formgroup.value.libelle.substring(0, 3).toUpperCase()) +
+            '-' +
+            (formgroup.value.categorie == undefined
+              ? ''
+              : formgroup.value.categorie.toUpperCase()) +
+            (reference == 0 ? '' : -reference)
+          "
+          class="form-control"
+          id="ref"
+          name="ref"
+          required
+          readonly
+        />
+      </div>
+    </div>
+    <div class="name d-flex gap-2">
+      <span class="btn" (click)="onClick(nom)" *ngFor="let nom of tabActu">
+        {{ nom }}
+      </span>
+    </div>
+    <div class="mb-6 name d-flex text-center gap-5">
+      <span class="btn position-relative span" *ngFor="let nom of tabInsert">
+        {{ nom }}
+        <i
+          (click)="clickOn(nom)"
+          class="fa-solid fa-xmark delete w-25 h-50"
+        ></i>
+      </span>
+    </div>
+
+    <button
+      #change
+      type="submit"
+      (click)="onValid($event)"
+      class="btn ajout"
+      [disabled]="formgroup.invalid || tabInsert.length == 0"
+    >
+      Ajouter
+    </button>
+    <div>
+      {{ message }}
+    </div>
+  </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

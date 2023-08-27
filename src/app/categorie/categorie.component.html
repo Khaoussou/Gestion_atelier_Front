@@ -1,0 +1,130 @@
+<div class="bap position-absolute top-50 start-50 translate-middle">
+  <div
+    class="container mt-5 position-absolute top-50 start-50 translate-middle"
+  >
+    <div class="row">
+      <div class="col-md-6">
+        <h2>Catégorie</h2>
+      </div>
+      <div class="col-md-5 text-right">
+        <div class="col d-flex justify-content-end">
+          <span class="me-2">Modifier</span>
+          <div class="form-check form-switch">
+            <input
+              class="form-check-input cursor"
+              (change)="inputDisabled()"
+              [(ngModel)]="id"
+              type="checkbox"
+              id="toggleSwitch"
+            />
+          </div>
+          <span class="ms-2">Ajouter</span>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-md-3">
+        <div class="input-group mb-3 d-flex justify-content-between w-100">
+          <label class="form-label col-md-3 fs-5">Libelle</label>
+          <input
+            type="text"
+            (input)="check()"
+            [disabled]="disabledInput"
+            class="form-control"
+            [(ngModel)]="name"
+          />
+        </div>
+        <div class="d-flex">
+          <div class="w-50">
+            <label for="" class="fs-5">Type de categorie</label>
+          </div>
+          <select name="" id="" class="form-select">
+            <option value="" disabled selected>Choisissez un type</option>
+            <option value="confection">Confection</option>
+            <option value="vente">Vente</option>
+          </select>
+        </div>
+        <div *ngIf="valueBout" class="text-primary">
+          {{ message }}
+        </div>
+      </div>
+      <div class="col-md-6 text-right">
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="newCategorie()"
+          [disabled]="valueBout"
+        >
+          OK
+        </button>
+      </div>
+    </div>
+    <div class="d-flex justify-content-between">
+      <div class="row mt-3">
+        <div class="col-md-12">
+          <h3>Liste des catégories</h3>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-5">
+          <button
+            type="button"
+            class="btn btn-danger"
+            (click)="deleteCategorie()"
+            [disabled]="disabledDelete"
+          >
+            Supprimer
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-3">
+      <div class="col-md-12">
+        <table class="table">
+          <thead>
+            <div class="d-flex gap-5">
+              <input
+                type="checkbox"
+                (change)="checkAllInput($event)"
+                [checked]="checkedInput"
+                [disabled]="yes"
+                class="cursor"
+              />
+              <h4 scope="col" class="fs-4">Libellé</h4>
+            </div>
+            <hr />
+          </thead>
+          <tbody>
+            <div
+              class="d-flex gap-5"
+              *ngFor="
+                let categorie of categories
+                  | paginate : { itemsPerPage: itemsPerPage, currentPage: p }
+              "
+            >
+              <input
+                #input
+                type="checkbox"
+                [disabled]="disabledCheckbox"
+                class="fs-4 cursor"
+                [checked]="checked"
+                (change)="isChecked($event, categorie.id)"
+              />
+              <label
+                (click)="isChecked($event, categorie.libelle)"
+                class="fs-4 cursor"
+                id="{{ categorie.id }}"
+                >{{ categorie.libelle }}</label
+              >
+            </div>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="mt-8 py-5 d-flex">
+      <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
+  </div>
+</div>
