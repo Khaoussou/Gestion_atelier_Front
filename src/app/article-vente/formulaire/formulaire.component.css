@@ -1,12 +1,22 @@
 .form-control {
   max-width: 200px;
 }
-/* Positionnement de la photo en haut à droite de la carte principale */
 #photoPreview {
   position: absolute;
   top: 10px;
   right: 10px;
 }
 .w {
-    width: 100vw;
+  width: 100vw;
+}
+.scrol {
+  overflow: scroll;
+  height: 25vh;
+}
+.message {
+  color: rgb(247, 81, 81);
+  /* background-color: brown; */
+  position: absolute;
+  right: 10px;
+  top: 39%;
 }

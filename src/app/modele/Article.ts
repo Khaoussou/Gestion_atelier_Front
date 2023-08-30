@@ -4,7 +4,5 @@ export interface Article {
   prix: number;
   stock: number;
   categorie: string;
-  fournisseur: string[];
   ref?: string;
-  photo?: File;
 }

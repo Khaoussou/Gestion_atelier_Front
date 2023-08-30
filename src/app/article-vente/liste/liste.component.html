@@ -1,1 +1,48 @@
-<p>liste works!</p>
+<div class="container">
+  <div class="card mb-4">
+    <div class="card-header">
+      <h2 class="card-title">Liste des articles</h2>
+    </div>
+    <div class="card-body">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Libellé</th>
+            <th>Stock</th>
+            <th>Article de Confection</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="selectionTableBody">
+          <tr
+            *ngFor="
+              let arv of articleVentes
+                | paginate : { itemsPerPage: itemsPerPage, currentPage: p }
+            "
+          >
+            <td>
+              {{ arv.libelle }}
+            </td>
+            <td>
+              {{ arv.stock }}
+            </td>
+            <td>
+              <span *ngFor="let item of arv.confection">
+                {{ item.article.libelle + "-" + item.quantite + ";" }}
+              </span>
+            </td>
+            <td>
+              <div class="d-flex gap-3">
+                <button class="btn ajout" (click)="updateArt(arv)">Update</button>
+                <button class="btn delete" (click)="deleteArt(arv)">Delete</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="mt-8 py-5 d-flex justify-content-center">
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  </div>
+</div>

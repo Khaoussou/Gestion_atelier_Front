@@ -1,1 +1,13 @@
-<app-formulaire></app-formulaire>
+<app-formulaire
+  [articleVentes]="articleVentes"
+  [articleConfs]="articleConfs"
+  [articleVente]="articleVente"
+  [categorieVentes]="categorieVentes"
+  (formgroupValue)="addOrUpdate($event)"
+  [message]="message"
+></app-formulaire>
+<app-liste
+  [articleVentes]="articleVentes"
+  (articleDelete)="deleteArt($event)"
+  (articleUpdate)="updateArt($event)"
+></app-liste>

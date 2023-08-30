@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Article } from '../modele/Article';
 import { ServiceMereService } from './service-mere.service';
+import { ArticleConfection } from '../modele/Article-confection';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ArticleService extends ServiceMereService<Article> {
+export class ArticleService extends ServiceMereService<ArticleConfection> {
   protected override Uri: string = 'articles';
 }

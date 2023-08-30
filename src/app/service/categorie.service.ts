@@ -19,6 +19,9 @@ export class CategorieService extends ServiceMereService<Categorie> {
     return this.http.delete<Response<Categorie>>(this.url + 'delete/', options);
   }
   updateCat<U>(id: number, body: U): Observable<Response<Categorie>> {
-    return this.http.put<Response<Categorie>>(this.url + this.Uri + '/' + id, body);
+    return this.http.put<Response<Categorie>>(
+      this.url + this.Uri + '/' + id,
+      body
+    );
   }
 }
