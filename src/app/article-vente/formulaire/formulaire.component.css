@@ -11,7 +11,7 @@
 }
 .scrol {
   overflow: scroll;
-  height: 25vh;
+  /* height: 25vh; */
 }
 .message {
   color: rgb(247, 81, 81);

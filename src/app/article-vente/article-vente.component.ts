@@ -15,12 +15,14 @@ export class ArticleVenteComponent implements OnInit {
   public articleConfs: Article[] = [];
   public categorieVentes: Categorie[] = [];
   public message!: string;
+  public valueBtn!: string;
   constructor(private articleVenteService: ArticleVenteService) {}
   ngOnInit(): void {
     this.getAll();
   }
 
   getAll() {
+    let bap: any
     this.articleVenteService.getAll().subscribe(
       (response) => {
         if (
@@ -29,6 +31,10 @@ export class ArticleVenteComponent implements OnInit {
           'articleConfs' in response.data
         ) {
           this.articleVentes = response.data.articleVentes as ArticleVente[];
+          // this.articleVentes.forEach(element => {
+          //   bap.push(element)
+          // })
+          // console.log(bap.sort());
           this.articleConfs = response.data.articleConfs as Article[];
           this.categorieVentes = response.data.categories as Categorie[];
         }
@@ -42,15 +48,29 @@ export class ArticleVenteComponent implements OnInit {
 
   addOrUpdate(event: ArticleVente) {
     console.log(event);
-    this.articleVenteService.add(event).subscribe((response) => {
-      this.message = response.message;
-      setTimeout(() => {
-        this.message = '';
-      }, 5000);
-      if (response.message == 'Insertion réussie !') {
-        this.articleVentes.unshift(response.data[0]);
-      }
-    });
+    console.log(this.articleVente);
+
+    if (this.valueBtn == 'Save') {
+      this.articleVenteService.add(event).subscribe((response) => {
+        this.message = response.message;
+        setTimeout(() => {
+          this.message = '';
+        }, 5000);
+        if (response.message == 'Insertion réussie !') {
+          this.articleVentes.unshift(response.data[0]);
+        }
+      });
+    } else {
+      let id: number = this.articleVente.id as number;
+      this.articleVenteService.updated(id, event).subscribe((response) => {
+        this.message = response.message;
+        setTimeout(() => {
+          this.message = '';
+        }, 5000);
+        this.getAll()
+      });
+      this.valueBtn = 'Save';
+    }
   }
 
   deleteArt(event: ArticleVente) {
@@ -68,5 +88,10 @@ export class ArticleVenteComponent implements OnInit {
 
   updateArt(event: ArticleVente) {
     this.articleVente = event;
+    console.log(this.articleVente);
+  }
+
+  value(event: string) {
+    this.valueBtn = event;
   }
 }

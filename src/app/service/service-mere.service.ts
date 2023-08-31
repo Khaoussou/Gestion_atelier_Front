@@ -23,6 +23,10 @@ export class ServiceMereService<T> {
     return this.http.post<Response<T>>(this.url + this.Uri + '/' + id, body);
   }
 
+  updated<U>(id: number, body: U): Observable<Response<T>> {
+    return this.http.put<Response<T>>(this.url + this.Uri + '/' + id, body);
+  }
+
   getById(id: number): Observable<Response<T>> {
     return this.http.get<Response<T>>(this.url + this.Uri + '/' + id);
   }

@@ -7,3 +7,10 @@
   background-color: rgb(247, 81, 81);
   color: white;
 }
+
+.number{
+  position: absolute;
+  width: 10%;
+  top: 40%;
+  right: 7%;
+}

@@ -7,10 +7,13 @@
       <table class="table">
         <thead>
           <tr>
-            <th>Libellé</th>
+            <th>
+              Libellé <i #trier (click)="trie($event)" class="fa-solid fa-chevron-up"></i>
+            </th>
             <th>Stock</th>
             <th>Article de Confection</th>
             <th>Action</th>
+            <th>Choix d'affichage</th>
           </tr>
         </thead>
         <tbody id="selectionTableBody">
@@ -33,11 +36,25 @@
             </td>
             <td>
               <div class="d-flex gap-3">
-                <button class="btn ajout" (click)="updateArt(arv)">Update</button>
-                <button class="btn delete" (click)="deleteArt(arv)">Delete</button>
+                <button class="btn ajout" (click)="updateArt(arv)">
+                  Update
+                </button>
+                <button class="btn delete" (click)="deleteArt(arv)">
+                  Delete
+                </button>
               </div>
             </td>
           </tr>
+          <select
+            (change)="choix($event)"
+            name=""
+            class="form-control number"
+            id=""
+          >
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
         </tbody>
       </table>
     </div>

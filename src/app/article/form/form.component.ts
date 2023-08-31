@@ -18,6 +18,7 @@ import {
 } from '@angular/forms';
 import { Article } from 'src/app/modele/Article';
 import { Fournisseur } from 'src/app/modele/Fournisseur';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-form',
@@ -46,9 +47,7 @@ export class FormComponent implements OnInit, OnChanges {
   public tabActu: string[] = [];
   public tabFour: string[] = [];
   public tabInsert: string[] = [];
-  public imageUrl: string =
-    '../assets/stock-vector-default-image-icon-vector-missing-picture-page-for-website-design-or-mobile-app-no-photo-2086941550.jpg';
-
+  public imageUrl: string = environment.url;
   public errorMessage = {
     'libelle.required': 'Le libelle est obligatoire !',
     'prix.required': 'Le prix est obligatoire !',
@@ -185,13 +184,12 @@ export class FormComponent implements OnInit, OnChanges {
     console.log(formData);
     console.log(this.formgroup.value.fournisseur);
     console.log(this.tabInsert);
-    this.formgroup.reset()
-    
-    this.imageUrl = 
-    '../assets/stock-vector-default-image-icon-vector-missing-picture-page-for-website-design-or-mobile-app-no-photo-2086941550.jpg';
+    this.formgroup.reset();
+
+    this.imageUrl = environment.url;
     this.tabInsert = [];
     this.tabActu = [];
-    this.reference = 0
+    this.reference = 0;
   }
 
   onValid(event: Event) {
@@ -206,9 +204,9 @@ export class FormComponent implements OnInit, OnChanges {
     let fileReader = new FileReader();
 
     fileReader.readAsDataURL(this.file);
-    
+
     fileReader.addEventListener('load', () => {
-      this.imageUrl = fileReader.result as string;      
+      this.imageUrl = fileReader.result as string;
       console.log(this.imageUrl);
     });
   }

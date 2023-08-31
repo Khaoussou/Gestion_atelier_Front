@@ -6,7 +6,7 @@ export class MargeValidator {
       const margenValues = control.value;
       const maxMargeValue = couDeFabrication / 3;
 
-      if (margenValues < 5000 && margenValues > maxMargeValue) {
+      if (margenValues < 5000 || margenValues > maxMargeValue) {
         return { margeValue: true };
       }
       return null;

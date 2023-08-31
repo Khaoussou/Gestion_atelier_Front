@@ -4,7 +4,6 @@ import {
   EventEmitter,
   Input,
   OnChanges,
-  OnInit,
   Output,
   SimpleChanges,
   ViewChild,
@@ -13,13 +12,15 @@ import {
   FormArray,
   FormBuilder,
   FormControl,
-  FormGroup,
+  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { Article } from 'src/app/modele/Article';
 import { ArticleVente } from 'src/app/modele/Article-vente';
 import { Categorie } from 'src/app/modele/Categorie';
 import { MargeValidator } from './MargeValidator';
+import { Confection } from 'src/app/modele/Confection';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-formulaire',
@@ -33,6 +34,7 @@ export class FormulaireComponent implements OnChanges {
   @Input() categorieVentes: Categorie[] = [];
   @Input() message!: string;
   @Output() formgroupValue: EventEmitter<any> = new EventEmitter<any>();
+  @Output() valueBtn: EventEmitter<string> = new EventEmitter<string>();
   @ViewChild('change') monElementRef!: ElementRef;
 
   public valueCheckbox: boolean = false;
@@ -43,16 +45,20 @@ export class FormulaireComponent implements OnChanges {
   public index: number = 0;
   public reference: number = 0;
   public couDeFabrication!: number;
+  public messageLibelle!: string;
   public file!: File;
-  public imageUrl: string =
-    '../assets/stock-vector-default-image-icon-vector-missing-picture-page-for-website-design-or-mobile-app-no-photo-2086941550.jpg';
+  public imageUrl: string = environment.url;
   public tabConfection!: FormArray<any>;
+  public tabValueArticle: string[] = [];
+  public tabActu: string[] = [];
+  public marSupp: number = 0;
+  public photo!: string;
   constructor(private formBuilder: FormBuilder) {}
 
   form = this.formBuilder.group({
     libelle: ['', Validators.required],
     categorie: ['', Validators.required],
-    promo: [0, Validators.required],
+    promo: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
     marge: [
       0,
       [
@@ -60,23 +66,30 @@ export class FormulaireComponent implements OnChanges {
         MargeValidator.margeValidation(this.couDeFabrication),
       ],
     ],
-    cout: [0, Validators.required],
-    prix: [0, Validators.required],
-    image: ['', Validators.required],
+    cout: [0, [Validators.required, Validators.min(0)]],
+    prix: [0, [Validators.required, Validators.min(0)]],
+    image: [environment.url, Validators.required],
     confection: this.formBuilder.array(
       [
         this.formBuilder.group({
           lib: ['', Validators.required],
-          quantite: [0, Validators.required],
+          quantite: [0, [Validators.required, Validators.min(0)]],
         }),
       ],
       [Validators.minLength(3)]
     ),
   });
 
+  get image() {
+    return this.form.get('image');
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if ('articleVente' in changes) {
       if (changes['articleVente'].currentValue) {
+        this.tabConfection = this.form.get('confection') as FormArray;
+        console.log(changes['articleVente'].currentValue.image);
+
         this.form.patchValue({
           libelle: changes['articleVente'].currentValue.libelle,
           categorie: changes['articleVente'].currentValue.categorie,
@@ -84,6 +97,20 @@ export class FormulaireComponent implements OnChanges {
           marge: changes['articleVente'].currentValue.marge,
           cout: changes['articleVente'].currentValue.cout,
           prix: changes['articleVente'].currentValue.prix,
+          // image: changes['articleVente'].currentValue.image,
+        });
+        console.log(changes['articleVente'].currentValue);
+        console.log(changes['articleVente'].currentValue.image as string);
+
+        let tab: Confection[] = changes['articleVente'].currentValue.confection;
+        this.tabConfection.clear();
+        tab.forEach((confection) => {
+          this.tabConfection.push(
+            this.formBuilder.group({
+              lib: confection.article.libelle,
+              quantite: confection.quantite,
+            })
+          );
         });
         if (changes['articleVente'].currentValue.promo != 0) {
           this.valueCheckbox = true;
@@ -91,6 +118,7 @@ export class FormulaireComponent implements OnChanges {
           this.valueCheckbox = false;
         }
         this.imageUrl = changes['articleVente'].currentValue.image;
+        this.form.patchValue({ image: '' });
       }
       if (this.monElementRef) {
         this.monElementRef.nativeElement.innerText = 'Update';
@@ -99,7 +127,7 @@ export class FormulaireComponent implements OnChanges {
   }
 
   displayValeurPromo(event: Event) {
-    let target: any = event.target;
+    let target: HTMLInputElement = event.target as HTMLInputElement;
     if (target.checked) {
       this.valueCheckbox = true;
     } else {
@@ -113,30 +141,58 @@ export class FormulaireComponent implements OnChanges {
     this.libArticleConf = this.articleConfs.map(
       (libelle: Article) => libelle.libelle
     );
-    if (this.targetArticle.value.length >= 2) {
+    if (this.targetArticle.value.length >= 1) {
       this.libArticleConfFilter = this.libArticleConf.filter((item) =>
         item
           .toLocaleLowerCase()
           .includes(this.targetArticle.value.toLocaleLowerCase())
       );
+      const foundItem = this.tabValueArticle.find((item) =>
+        this.libArticleConfFilter.includes(item)
+      );
+      if (foundItem) {
+        console.log(
+          this.libArticleConfFilter.splice(
+            this.libArticleConfFilter.indexOf(foundItem),
+            this.tabValueArticle.length
+          )
+        );
+        this.tabActu = this.libArticleConfFilter;
+      } else {
+        this.tabActu = this.libArticleConfFilter;
+      }
       console.log(this.libArticleConfFilter);
     } else {
       this.libArticleConfFilter = [];
     }
   }
 
+  onValid(event: Event) {
+    let target: any = event.target;
+    this.valueBtn.emit(target.innerText);
+    console.log(target.innerText);
+  }
+
   refNameCat() {
     this.reference =
-      this.articleConfs.filter(
+      this.articleVentes.filter(
         (categorie: any) => categorie.categorie === this.form.value.categorie
       ).length + 1;
-    console.log(this.articleConfs);
+    console.log(this.articleVentes);
+  }
+
+  get marge() {
+    return this.form.get('marge');
   }
 
   getValuePrix(event: Event) {
     let target: any = event.target;
     let marge: number = +target.value;
     if (target.value.length >= 4) {
+      // this.marge?.setValidators(
+      //   MargeValidator.margeValidation(this.couDeFabrication)
+      // );
+      console.log(this.marge?.errors);
       if (marge >= 5000 && marge < this.couDeFabrication / 3) {
         target.style.border = 'none';
         target.style.border = '3px solid green';
@@ -145,15 +201,15 @@ export class FormulaireComponent implements OnChanges {
         });
       } else {
         target.style.border = '3px solid red';
+        this.marSupp = this.couDeFabrication / 3;
         this.form.patchValue({
-          prix: this.couDeFabrication,
+          prix: 0,
         });
-        console.log(this.couDeFabrication);
       }
     } else {
       target.style.border = '3px solid red';
       this.form.patchValue({
-        prix: this.couDeFabrication,
+        prix: 0,
       });
     }
   }
@@ -177,22 +233,53 @@ export class FormulaireComponent implements OnChanges {
     this.form.reset();
     this.form.patchValue({ promo: 0 });
     this.tabConfection.clear();
+    this.tabValueArticle = [];
+    this.imageUrl = environment.url;
     this.reference = 0;
+    this.couDeFabrication = 0;
   }
 
-  valueArticle(nom: string) {
+  valueArticle(nom: string, index: number) {
     this.tabConfection = this.form.get('confection') as FormArray;
     this.targetArticle.value = nom;
-    this.libArticleConfFilter = [];
+    this.tabValueArticle.push(this.targetArticle.value);
+    this.tabActu = [];
     console.log(this.coutDeFabrique());
     this.updateValueGroup(this.index, 'lib', this.targetArticle.value);
   }
 
   addArtConf() {
+    console.log(this.index);
+    console.log(this.libArticleConfFilter);
     this.tabConfection = this.form.get('confection') as FormArray;
-    this.tabConfection.push(this.newRow());
-    console.log(this.couDeFabrication);
-    console.log(this.tabConfection.value);
+    if (this.tabConfection.value.length == 0) {
+      this.index = 0;
+    }
+    if (this.index == 0 && this.tabConfection.value.length == 0) {
+      this.tabConfection.push(this.newRow());
+    }
+    if (
+      this.tabConfection.value[this.index].lib != undefined &&
+      this.tabConfection.value[this.index].lib != ''
+    ) {
+      if (this.libArticleConfFilter.length == 0) {
+        this.messageLibelle = "Cet article n'existe pas !";
+        setTimeout(() => {
+          this.messageLibelle = '';
+        }, 5000);
+      } else {
+        this.tabConfection.push(this.newRow());
+        this.index++;
+      }
+      console.log(this.tabConfection.value.length);
+      console.log('bap');
+    } else {
+      this.messageLibelle = 'Veuillez remplir le libelle svp !';
+      setTimeout(() => {
+        this.messageLibelle = '';
+      }, 5000);
+    }
+    console.log(this.index);
   }
 
   newRow() {
@@ -246,7 +333,43 @@ export class FormulaireComponent implements OnChanges {
     fileReader.readAsDataURL(this.file);
 
     fileReader.addEventListener('load', () => {
+      this.image?.setValue(fileReader.result as string);
       this.imageUrl = fileReader.result as string;
     });
   }
+
+  /*
+    static articleValidation(couDeFabrication: number) {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const margenValues = control.value;
+      const maxMargeValue = couDeFabrication / 3;
+
+      if (margenValues < 5000 || margenValues > maxMargeValue) {
+        return { margeValue: true };
+      }
+      return null;
+    };
+  }
+  }
+  */
+
+  /* 
+    public function hasCategorie($articleConfs)
+    {
+        $libelleArticles = array_map(fn ($article) => $article["lib"], $articleConfs);
+        foreach ($libelleArticles as $categorie) {
+            if (!Article::getArtByLib($categorie)->first()) {
+                return false;
+            }
+            $categories[] = Article::getArtByLib($categorie)->first()->categorie_id;
+        }
+        foreach ($categories as $id) {
+            $libelleCategories[] = Categorie::getCatById($id)->first()->libelle;
+        }
+        if (in_array("Tissus", $libelleCategories, true) && in_array("Boutons", $libelleCategories, true) && in_array("Fils", $libelleCategories, true)) {
+            return true;
+        }
+        return false;
+    }
+  */
 }

@@ -10,6 +10,7 @@ export class ListeComponent {
   @Input() articleVentes: ArticleVente[] = [];
   public itemsPerPage: number = 3;
   public p: number = 1;
+  /*fa-solid fa-chevron-down*/
 
   @Output() articleDelete: EventEmitter<ArticleVente> =
     new EventEmitter<ArticleVente>();
@@ -22,5 +23,16 @@ export class ListeComponent {
 
   updateArt(article: ArticleVente) {
     this.articleUpdate.emit(article);
+  }
+
+  choix(event: Event) {
+    let target: any = event.target;
+    this.itemsPerPage = target.value;
+  }
+
+  trie(event: Event) {
+    let target: any = event.target;
+    // console.log(target.toggle('fa-solid fa-chevron-down'));
+    console.log(target.classList.value = 'fa-solid fa-chevron-down');
   }
 }
