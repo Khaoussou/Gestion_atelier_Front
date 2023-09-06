@@ -10,7 +10,7 @@ export class ListeComponent {
   @Input() articleVentes: ArticleVente[] = [];
   public itemsPerPage: number = 3;
   public p: number = 1;
-  /*fa-solid fa-chevron-down*/
+  public down: boolean = false;
 
   @Output() articleDelete: EventEmitter<ArticleVente> =
     new EventEmitter<ArticleVente>();
@@ -30,9 +30,46 @@ export class ListeComponent {
     this.itemsPerPage = target.value;
   }
 
-  trie(event: Event) {
-    let target: any = event.target;
-    // console.log(target.toggle('fa-solid fa-chevron-down'));
-    console.log(target.classList.value = 'fa-solid fa-chevron-down');
+  trie() {
+    this.down = !this.down;
+    if (this.down) {
+      this.articleVentes = this.articleVentes.sort(
+        (a: ArticleVente, b: ArticleVente) => {
+          let libA = a.libelle.toLowerCase();
+          let libB = b.libelle.toLowerCase();
+          if (libA < libB) {
+            return 1;
+          }
+          if (libA > libB) {
+            return -1;
+          }
+          return 0;
+        }
+      );
+    } else {
+      this.articleVentes = this.articleVentes.sort(
+        (a: ArticleVente, b: ArticleVente) => {
+          let libA = a.libelle.toLowerCase();
+          let libB = b.libelle.toLowerCase();
+          if (libA < libB) {
+            return -1;
+          }
+          if (libA > libB) {
+            return 1;
+          }
+          return 0;
+        }
+      );
+    }
+    console.log(this.articleVentes);
+  }
+
+  filter(event: Event) {
+    let target: HTMLInputElement = event.target as HTMLInputElement;
+    this.articleVentes = this.articleVentes.filter((item) =>
+      item.libelle.toLowerCase().includes(target.value.toLowerCase())
+    );
+    console.log(target.value);
+    console.log(this.articleVentes);
   }
 }

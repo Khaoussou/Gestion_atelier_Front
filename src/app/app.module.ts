@@ -3,7 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxPaginationModule } from 'ngx-pagination';
 
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CategorieComponent } from './categorie/categorie.component';
@@ -19,28 +18,28 @@ import { FormulaireComponent } from './article-vente/formulaire/formulaire.compo
 import { ListeComponent } from './article-vente/liste/liste.component';
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        CategorieComponent,
-        NavBarComponent,
-        ArticleComponent,
-        FormComponent,
-        ListComponent,
-        ItemComponent,
-        PaginationComponent,
-        ArticleVenteComponent,
-        FormulaireComponent,
-        ListeComponent,
-    ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        HttpClientModule,
-        NgxPaginationModule,
-        FormsModule,
-        ReactiveFormsModule,
-    ],
-    providers: [],
-    bootstrap: [AppComponent]
+  declarations: [
+    AppComponent,
+    CategorieComponent,
+    NavBarComponent,
+    ArticleComponent,
+    FormComponent,
+    ListComponent,
+    ItemComponent,
+    PaginationComponent,
+    ArticleVenteComponent,
+    FormulaireComponent,
+    ListeComponent,
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    NgxPaginationModule,
+    FormsModule,
+    ReactiveFormsModule,
+  ],
+  providers: [],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

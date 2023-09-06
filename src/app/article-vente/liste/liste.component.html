@@ -2,13 +2,31 @@
   <div class="card mb-4">
     <div class="card-header">
       <h2 class="card-title">Liste des articles</h2>
+      <div class="d-flex gap-3">
+        <label for="" class="fs-5">Filtrer par: </label>
+        <input
+          type="text"
+          name=""
+          (input)="filter($event)"
+          placeholder="Veuillez saisir un libelle"
+          class="form-control w-25"
+          id=""
+        />
+      </div>
     </div>
     <div class="card-body">
       <table class="table">
         <thead>
           <tr>
             <th>
-              Libellé <i #trier (click)="trie($event)" class="fa-solid fa-chevron-up"></i>
+              Libellé
+              <i
+                #trier
+                (click)="trie()"
+                style="cursor: pointer"
+                class="fa-solid"
+                [ngClass]="{ 'fa-chevron-down': down, 'fa-chevron-up': !down }"
+              ></i>
             </th>
             <th>Stock</th>
             <th>Article de Confection</th>

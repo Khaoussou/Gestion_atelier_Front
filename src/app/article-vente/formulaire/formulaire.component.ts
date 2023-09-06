@@ -8,13 +8,7 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import {
-  FormArray,
-  FormBuilder,
-  FormControl,
-  ValidationErrors,
-  Validators,
-} from '@angular/forms';
+import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { Article } from 'src/app/modele/Article';
 import { ArticleVente } from 'src/app/modele/Article-vente';
 import { Categorie } from 'src/app/modele/Categorie';
@@ -53,6 +47,7 @@ export class FormulaireComponent implements OnChanges {
   public tabActu: string[] = [];
   public marSupp: number = 0;
   public photo!: string;
+  public bap: boolean = true;
   constructor(private formBuilder: FormBuilder) {}
 
   form = this.formBuilder.group({
@@ -68,7 +63,7 @@ export class FormulaireComponent implements OnChanges {
     ],
     cout: [0, [Validators.required, Validators.min(0)]],
     prix: [0, [Validators.required, Validators.min(0)]],
-    image: [environment.url, Validators.required],
+    image: ['', Validators.required],
     confection: this.formBuilder.array(
       [
         this.formBuilder.group({
@@ -80,9 +75,9 @@ export class FormulaireComponent implements OnChanges {
     ),
   });
 
-  get image() {
-    return this.form.get('image');
-  }
+  // get image() {
+  //   return this.form.get('image');
+  // }
 
   ngOnChanges(changes: SimpleChanges): void {
     if ('articleVente' in changes) {
@@ -162,8 +157,10 @@ export class FormulaireComponent implements OnChanges {
         this.tabActu = this.libArticleConfFilter;
       }
       console.log(this.libArticleConfFilter);
+      console.log(this.tabActu);
     } else {
-      this.libArticleConfFilter = [];
+      // this.libArticleConfFilter = [];
+      this.tabActu = [];
     }
   }
 
@@ -239,9 +236,15 @@ export class FormulaireComponent implements OnChanges {
     this.couDeFabrication = 0;
   }
 
-  valueArticle(nom: string, index: number) {
+  valueArticle(nom: string) {
     this.tabConfection = this.form.get('confection') as FormArray;
     this.targetArticle.value = nom;
+    console.log(this.targetArticle.value);
+    // if (this.targetArticle.value) {
+    //   this.bap = false;
+    // } else {
+    //   this.bap = true;
+    // }
     this.tabValueArticle.push(this.targetArticle.value);
     this.tabActu = [];
     console.log(this.coutDeFabrique());
@@ -252,6 +255,15 @@ export class FormulaireComponent implements OnChanges {
     console.log(this.index);
     console.log(this.libArticleConfFilter);
     this.tabConfection = this.form.get('confection') as FormArray;
+    console.log(this.tabConfection.value);
+    console.log(this.libArticleConfFilter.length);
+    console.log(this.tabActu.length);
+
+    if (this.targetArticle.value) {
+      this.bap = false
+      console.log(this.targetArticle.value);
+      
+    }
     if (this.tabConfection.value.length == 0) {
       this.index = 0;
     }
@@ -262,6 +274,16 @@ export class FormulaireComponent implements OnChanges {
       this.tabConfection.value[this.index].lib != undefined &&
       this.tabConfection.value[this.index].lib != ''
     ) {
+      console.log(this.tabConfection.value.length);
+
+      this.index = this.tabConfection.value.length - 1;
+      console.log(this.index);
+      // this.libArticleConfFilter = this.tabConfection.value
+      console.log(this.libArticleConfFilter);
+      console.log(this.libArticleConfFilter.length);
+      console.log(this.targetArticle.value);
+      console.log(this.tabConfection.value[this.index].lib);
+
       if (this.libArticleConfFilter.length == 0) {
         this.messageLibelle = "Cet article n'existe pas !";
         setTimeout(() => {
@@ -272,7 +294,6 @@ export class FormulaireComponent implements OnChanges {
         this.index++;
       }
       console.log(this.tabConfection.value.length);
-      console.log('bap');
     } else {
       this.messageLibelle = 'Veuillez remplir le libelle svp !';
       setTimeout(() => {
@@ -283,18 +304,31 @@ export class FormulaireComponent implements OnChanges {
   }
 
   newRow() {
+    console.log(this.bap);
+    
     return this.formBuilder.group({
       lib: this.formBuilder.control('', Validators.required),
-      quantite: this.formBuilder.control(0, Validators.required),
+      quantite: this.formBuilder.control(
+        { value: 0, disabled: this.bap },
+        Validators.required
+      ),
     });
   }
 
   deleteArtConf(index: number) {
+    this.index = this.index - 1;
+    console.log(this.index);
+
     this.tabConfection = this.form.get('confection') as FormArray;
     this.confection.removeAt(index);
     this.form.patchValue({ cout: this.coutDeFabrique() });
     this.couDeFabrication = this.coutDeFabrique();
     console.log(this.tabConfection.value);
+    console.log(this.libArticleConfFilter.length);
+    console.log(this.libArticleConfFilter);
+    // this.libArticleConfFilter = []
+    console.log(this.libArticleConfFilter);
+    console.log(this.tabActu);
   }
 
   get confection() {
@@ -333,7 +367,7 @@ export class FormulaireComponent implements OnChanges {
     fileReader.readAsDataURL(this.file);
 
     fileReader.addEventListener('load', () => {
-      this.image?.setValue(fileReader.result as string);
+      // this.image?.setValue(fileReader.result as string);
       this.imageUrl = fileReader.result as string;
     });
   }

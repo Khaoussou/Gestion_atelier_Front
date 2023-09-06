@@ -22,7 +22,7 @@ export class ArticleVenteComponent implements OnInit {
   }
 
   getAll() {
-    let bap: any
+    let bap: any;
     this.articleVenteService.getAll().subscribe(
       (response) => {
         if (
@@ -31,10 +31,19 @@ export class ArticleVenteComponent implements OnInit {
           'articleConfs' in response.data
         ) {
           this.articleVentes = response.data.articleVentes as ArticleVente[];
-          // this.articleVentes.forEach(element => {
-          //   bap.push(element)
-          // })
-          // console.log(bap.sort());
+          this.articleVentes = this.articleVentes.sort(
+            (a: ArticleVente, b: ArticleVente) => {
+              let libA = a.libelle.toLocaleLowerCase();
+              let libB = b.libelle.toLocaleLowerCase();
+              if (libA < libB) {
+                return -1;
+              }
+              if (libA > libB) {
+                return 1;
+              }
+              return 0;
+            }
+          );
           this.articleConfs = response.data.articleConfs as Article[];
           this.categorieVentes = response.data.categories as Categorie[];
         }
@@ -67,7 +76,7 @@ export class ArticleVenteComponent implements OnInit {
         setTimeout(() => {
           this.message = '';
         }, 5000);
-        this.getAll()
+        this.getAll();
       });
       this.valueBtn = 'Save';
     }
