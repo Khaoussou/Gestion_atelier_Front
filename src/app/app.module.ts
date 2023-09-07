@@ -16,6 +16,7 @@ import { ItemComponent } from './article/list/item/item.component';
 import { ArticleVenteComponent } from './article-vente/article-vente.component';
 import { FormulaireComponent } from './article-vente/formulaire/formulaire.component';
 import { ListeComponent } from './article-vente/liste/liste.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { ListeComponent } from './article-vente/liste/liste.component';
     NgxPaginationModule,
     FormsModule,
     ReactiveFormsModule,
+    NgSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent],

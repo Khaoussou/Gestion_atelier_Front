@@ -3,6 +3,6 @@ export interface Article {
   libelle: string;
   prix: number;
   stock: number;
-  categorie: string;
+  categorie: string ;
   ref?: string;
 }

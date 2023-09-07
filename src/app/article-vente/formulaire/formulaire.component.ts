@@ -259,10 +259,9 @@ export class FormulaireComponent implements OnChanges {
     console.log(this.libArticleConfFilter.length);
     console.log(this.tabActu.length);
 
-    if (this.targetArticle.value) {
+    if (this.targetArticle.value != '') {
       this.bap = false
       console.log(this.targetArticle.value);
-      
     }
     if (this.tabConfection.value.length == 0) {
       this.index = 0;
@@ -275,10 +274,9 @@ export class FormulaireComponent implements OnChanges {
       this.tabConfection.value[this.index].lib != ''
     ) {
       console.log(this.tabConfection.value.length);
-
       this.index = this.tabConfection.value.length - 1;
       console.log(this.index);
-      // this.libArticleConfFilter = this.tabConfection.value
+      this.libArticleConfFilter = this.tabConfection.value
       console.log(this.libArticleConfFilter);
       console.log(this.libArticleConfFilter.length);
       console.log(this.targetArticle.value);
@@ -305,11 +303,10 @@ export class FormulaireComponent implements OnChanges {
 
   newRow() {
     console.log(this.bap);
-    
     return this.formBuilder.group({
       lib: this.formBuilder.control('', Validators.required),
       quantite: this.formBuilder.control(
-        { value: 0, disabled: this.bap },
+        0,
         Validators.required
       ),
     });
@@ -318,7 +315,6 @@ export class FormulaireComponent implements OnChanges {
   deleteArtConf(index: number) {
     this.index = this.index - 1;
     console.log(this.index);
-
     this.tabConfection = this.form.get('confection') as FormArray;
     this.confection.removeAt(index);
     this.form.patchValue({ cout: this.coutDeFabrique() });
@@ -326,7 +322,6 @@ export class FormulaireComponent implements OnChanges {
     console.log(this.tabConfection.value);
     console.log(this.libArticleConfFilter.length);
     console.log(this.libArticleConfFilter);
-    // this.libArticleConfFilter = []
     console.log(this.libArticleConfFilter);
     console.log(this.tabActu);
   }
@@ -367,7 +362,6 @@ export class FormulaireComponent implements OnChanges {
     fileReader.readAsDataURL(this.file);
 
     fileReader.addEventListener('load', () => {
-      // this.image?.setValue(fileReader.result as string);
       this.imageUrl = fileReader.result as string;
     });
   }

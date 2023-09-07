@@ -2,16 +2,37 @@
   <div class="card mb-4">
     <div class="card-header">
       <h2 class="card-title">Liste des articles</h2>
-      <div class="d-flex gap-3">
-        <label for="" class="fs-5">Filtrer par: </label>
-        <input
-          type="text"
-          name=""
-          (input)="filter($event)"
-          placeholder="Veuillez saisir un libelle"
-          class="form-control w-25"
-          id=""
-        />
+      <div class="d-flex gap-3 justify-content-between">
+        <div>
+          <label for="" class="fs-6">Filtrer par libelle </label>
+          <input
+            type="text"
+            name=""
+            (input)="filter($event)"
+            placeholder="Veuillez saisir un libelle"
+            class="form-control w-50"
+            id=""
+          />
+        </div>
+        <div>
+          <label for="" class="fs-6">Filtrer par categorie de confection</label>
+          <ng-select
+            [items]="cateConfs"
+            bindLabel="libelle"
+            bindValue="id"
+            (change)="itemSelected($event)"
+            [clearable]="true"
+            [multiple]="true"
+          ></ng-select>
+        </div>
+        <div>
+          <label for="" class="fs-6">Choix d'affichage</label>
+          <select (change)="choix($event)" name="" class="form-control" id="">
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+        </div>
       </div>
     </div>
     <div class="card-body">
@@ -31,7 +52,6 @@
             <th>Stock</th>
             <th>Article de Confection</th>
             <th>Action</th>
-            <th>Choix d'affichage</th>
           </tr>
         </thead>
         <tbody id="selectionTableBody">
@@ -63,20 +83,11 @@
               </div>
             </td>
           </tr>
-          <select
-            (change)="choix($event)"
-            name=""
-            class="form-control number"
-            id=""
-          >
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select>
         </tbody>
       </table>
     </div>
   </div>
+
   <div class="mt-8 py-5 d-flex justify-content-center">
     <pagination-controls (pageChange)="p = $event"></pagination-controls>
   </div>
