@@ -363,41 +363,7 @@ export class FormulaireComponent implements OnChanges {
 
     fileReader.addEventListener('load', () => {
       this.imageUrl = fileReader.result as string;
+      console.log(this.imageUrl);
     });
   }
-
-  /*
-    static articleValidation(couDeFabrication: number) {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const margenValues = control.value;
-      const maxMargeValue = couDeFabrication / 3;
-
-      if (margenValues < 5000 || margenValues > maxMargeValue) {
-        return { margeValue: true };
-      }
-      return null;
-    };
-  }
-  }
-  */
-
-  /* 
-    public function hasCategorie($articleConfs)
-    {
-        $libelleArticles = array_map(fn ($article) => $article["lib"], $articleConfs);
-        foreach ($libelleArticles as $categorie) {
-            if (!Article::getArtByLib($categorie)->first()) {
-                return false;
-            }
-            $categories[] = Article::getArtByLib($categorie)->first()->categorie_id;
-        }
-        foreach ($categories as $id) {
-            $libelleCategories[] = Categorie::getCatById($id)->first()->libelle;
-        }
-        if (in_array("Tissus", $libelleCategories, true) && in_array("Boutons", $libelleCategories, true) && in_array("Fils", $libelleCategories, true)) {
-            return true;
-        }
-        return false;
-    }
-  */
 }
